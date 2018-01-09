@@ -1,34 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   bistro.h                                           :+:      :+:    :+:   */
+/*   ft_strchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/01/08 13:49:48 by sgardner          #+#    #+#             */
-/*   Updated: 2018/01/08 16:32:24 by sgardner         ###   ########.fr       */
+/*   Created: 2016/12/16 01:17:17 by sgardner          #+#    #+#             */
+/*   Updated: 2018/01/08 16:28:02 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef BISTRO_H
-# define BISTRO_H
-# include "libft.h"
+#include "libft.h"
 
-typedef struct	s_digit
+char	*ft_strchr(const char *s, int c)
 {
-	int				remain;
-	int				n;
-	struct s_digit	*next;
-}				t_digit;
+	char	b;
 
-typedef struct	s_num
-{
-	t_digit	*head;
-	char	*op;
-	char	*key;
-	int		op_len;
-	int		base;
-}				t_num;
-
-t_bool			syntax_error(void);
-#endif
+	b = (char)c;
+	while (*s && *s != b)
+		s++;
+	return ((*s == b) ? (char *)s : NULL);
+}

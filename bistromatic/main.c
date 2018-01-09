@@ -6,19 +6,28 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/08 13:57:20 by sgardner          #+#    #+#             */
-/*   Updated: 2018/01/08 15:40:30 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/01/08 16:42:01 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include <unistd.h>
 #include "bistro.h"
-#include "libft.h"
 #include <stdio.h>
-static t_bool	syntax_error(void)
+static t_bool	add_digit(t_num *num, char c)
 {
-	write(2, "syntax error\n", 13);
-	return (FALSE);
+	t_digit	**digit;
+	char	*pos;
+
+	if (!(pos = ft_strchr(num->key, c)))
+		return (syntax_error());
+	digit = &num->head;
+	while (*digit)
+		digit = &(*digit)->next;
+	if (!(*digit = (t_digit *)ft_memalloc(sizeof(t_digit))))
+		return (FALSE);
+	(*digit)->n = pos - num->key;
+	return (TRUE);
 }
 
 static t_bool	read_op(t_num *num)
@@ -31,6 +40,26 @@ static t_bool	read_op(t_num *num)
 		return (FALSE);
 	}
 	return (TRUE);
+}
+
+static void		reverse_num(t_num *num)
+{
+	t_digit	*digit;
+	t_digit	*prev;
+	t_digit	*next;
+
+	digit = num->head;
+	prev = NULL;
+	while (TRUE)
+	{
+		next = digit->next;
+		digit->next = prev;
+		prev = digit;
+		if (!next)
+			break ;
+		digit = next;
+	}
+	num->head = digit;
 }
 
 static t_bool	verify_params(t_num *num, char *base, char *size)
@@ -60,6 +89,12 @@ static t_bool	verify_params(t_num *num, char *base, char *size)
 	return (i > 0);
 }
 
+t_bool			syntax_error(void)
+{
+	write(2, "syntax error\n", 13);
+	return (FALSE);
+}
+
 int				main(int ac, char **av)
 {
 	t_num	*num;
@@ -69,6 +104,17 @@ int				main(int ac, char **av)
 		|| !verify_params(num, av[1], av[2])
 		|| !read_op(num))
 		return (1);
-	printf("op: %s\nop_len: %d\nbase: %d\nkey: %s\n", num->op, num->op_len, num->base, num->key);
+printf("op: %s\nop_len: %d\nbase: %d\nkey: %s\n", num->op, num->op_len, num->base, num->key);
+	while (*num->op)
+		add_digit(num, *num->op++);
+	reverse_num(num);
+	t_digit *head = num->head;
+	while (head)
+	{
+		printf("%d", head->n);
+		head = head->next;
+	}
+	printf("\n");
+	UNUSED(reverse_num);
 	return (0);
 }
