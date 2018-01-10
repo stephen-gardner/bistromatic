@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/08 13:49:48 by sgardner          #+#    #+#             */
-/*   Updated: 2018/01/08 23:31:10 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/01/09 18:44:35 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,10 @@ typedef struct	s_digit
 
 typedef struct	s_num
 {
-	t_digit	*digits;
+	t_digit	*start;
+	t_digit	*end;
 	int		sign;
+	int		len;
 }				t_num;
 
 typedef struct	s_calc
@@ -47,12 +49,14 @@ t_bool			syntax_error(void);
 
 t_bool			append_digit(t_num *num, int n);
 void			destroy_num(t_num **num);
-t_bool			read_digit(t_num *num, char c);
+void			print_num(t_calc *calc, t_num *num);
+t_num			*read_num(t_calc *calc, char *raw, int len);
 void			reverse_num(t_num *num);
 
 /*
 ** ops.c
 */
 
-t_num			*add_num(t_num *n1, t_num *n2);
+t_num			*add_num(t_calc *calc, t_digit *d1, t_digit *d2);
+t_num			*sub_num(t_calc *calc, t_digit *d1, t_digit *d2);
 #endif
