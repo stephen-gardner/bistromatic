@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/08 19:28:25 by sgardner          #+#    #+#             */
-/*   Updated: 2018/01/09 18:44:38 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/01/09 21:50:26 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void	print_num(t_calc *calc, t_num *num)
 	int		len;
 
 	len = 0;
-	digit = num->start;
+	digit = skip_zeroes(num->start);
 	while (digit)
 	{
 		len++;
@@ -62,7 +62,7 @@ void	print_num(t_calc *calc, t_num *num)
 	if (!(out = (char *)ft_memalloc(len + 1)))
 		return ;
 	len = 0;
-	digit = num->start;
+	digit = skip_zeroes(num->start);
 	while (digit)
 	{
 		out[len++] = calc->base[digit->n];
@@ -98,24 +98,4 @@ t_num	*read_num(t_calc *calc, char *raw, int len)
 		}
 	}
 	return (num);
-}
-
-void	reverse_num(t_num *num)
-{
-	t_digit	*digit;
-	t_digit	*prev;
-	t_digit	*next;
-
-	digit = num->start;
-	prev = NULL;
-	while (TRUE)
-	{
-		next = digit->next;
-		digit->next = prev;
-		prev = digit;
-		if (!next)
-			break ;
-		digit = next;
-	}
-	num->start = digit;
 }

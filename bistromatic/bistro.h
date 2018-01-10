@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/08 13:49:48 by sgardner          #+#    #+#             */
-/*   Updated: 2018/01/09 18:44:35 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/01/09 21:49:44 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ t_bool			append_digit(t_num *num, int n);
 void			destroy_num(t_num **num);
 void			print_num(t_calc *calc, t_num *num);
 t_num			*read_num(t_calc *calc, char *raw, int len);
-void			reverse_num(t_num *num);
 
 /*
 ** ops.c
@@ -59,4 +58,11 @@ void			reverse_num(t_num *num);
 
 t_num			*add_num(t_calc *calc, t_digit *d1, t_digit *d2);
 t_num			*sub_num(t_calc *calc, t_digit *d1, t_digit *d2);
+
+/*
+** util.c
+*/
+
+void			reverse_num(t_num *num);
+t_digit			*skip_zeroes(t_digit *digits);
 #endif
