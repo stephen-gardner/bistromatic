@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/08 19:35:32 by sgardner          #+#    #+#             */
-/*   Updated: 2018/01/09 18:44:33 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/01/09 21:34:45 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ t_num	*sub_num(t_calc *calc, t_digit *d1, t_digit *d2)
 		n = carry;
 		if (d1)
 		{
-			n = d1->n - n; 
+			n += d1->n;
 			d1 = d1->next;
 		}
 		if (d2)
@@ -62,8 +62,8 @@ t_num	*sub_num(t_calc *calc, t_digit *d1, t_digit *d2)
 			n -= d2->n;
 			d2 = d2->next;
 		}
-		if ((carry = (n <= 0) ? 1 : 0))
-			n = calc->nbase - n;
+		if ((carry = (n < 0) ? -1 : 0))
+			n += calc->nbase;
 		append_digit(res, n);
 	}
 	return (res);
