@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/08 13:49:48 by sgardner          #+#    #+#             */
-/*   Updated: 2018/01/11 15:10:15 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/01/11 15:35:32 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,20 @@ typedef struct	s_calc
 }				t_calc;
 
 /*
+** arith_add.c
+*/
+
+t_num			*add(t_calc *calc, t_num *n1, t_num *n2);
+t_num			*add_digits(t_calc *calc, t_digit *d1, t_digit *d2);
+
+/*
+** arith_sub.c
+*/
+
+t_num			*sub(t_calc *calc, t_num *n1, t_num *n2);
+t_num			*sub_digits(t_calc *calc, t_digit *d1, t_digit *d2);
+
+/*
 ** main.c
 */
 
@@ -53,13 +67,6 @@ void			destroy_num(t_num **num);
 t_bool			prepend_digit(t_num *num, int n);
 void			print_num(t_calc *calc, t_num *num);
 t_num			*read_num(t_calc *calc, char *raw, int len);
-
-/*
-** ops.c
-*/
-
-t_num			*add(t_calc *calc, t_num *n1, t_num *n2);
-t_num			*sub(t_calc *calc, t_num *n1, t_num *n2);
 
 /*
 ** util.c
