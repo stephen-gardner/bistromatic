@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/09 21:45:17 by sgardner          #+#    #+#             */
-/*   Updated: 2018/01/09 21:51:09 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/01/10 15:29:40 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ void	reverse_num(t_num *num)
 	t_digit	*next;
 
 	digit = num->start;
+	num->end = digit;
 	prev = NULL;
 	while (TRUE)
 	{
