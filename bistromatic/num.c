@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/08 19:28:25 by sgardner          #+#    #+#             */
-/*   Updated: 2018/01/10 22:06:20 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/01/11 14:45:14 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ t_bool	append_digit(t_num *num, int n)
 	if (!(digit = (t_digit *)ft_memalloc(sizeof(t_digit))))
 		return (FALSE);
 	digit->n = n;
+	digit->prev = num->end;
 	if (!num->start)
 		num->start = digit;
 	if (num->end)
@@ -46,6 +47,21 @@ void	destroy_num(t_num **num)
 	*num = NULL;
 }
 
+t_bool	prepend_digit(t_num *num, int n)
+{
+	t_digit	*digit;
+
+	if (!(digit = (t_digit *)ft_memalloc(sizeof(t_digit))))
+		return (FALSE);
+	digit->n = n;
+	digit->next = num->start;
+	num->start = digit;
+	if (!num->end)
+		num->end = digit;
+	num->len++;
+	return (TRUE);
+}
+
 void	print_num(t_calc *calc, t_num *num)
 {
 	char	*out;
@@ -55,7 +71,7 @@ void	print_num(t_calc *calc, t_num *num)
 	if (!(out = (char *)ft_memalloc(num->len + (num->sign < 0) + 1)))
 		return ;
 	i = 0;
-	digit = skip_zeroes(num->start);
+	digit = num->start;
 	if (num->sign < 0 && digit && digit->n != 0)
 		out[i++] = '-';
 	while (digit)
