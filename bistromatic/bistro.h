@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/08 13:49:48 by sgardner          #+#    #+#             */
-/*   Updated: 2018/01/10 22:14:41 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/01/10 22:25:17 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ t_num			*read_num(t_calc *calc, char *raw, int len);
 */
 
 t_num			*add(t_calc *calc, t_num *n1, t_num *n2);
-t_num			*subtract(t_calc *calc, t_num *n1, t_num *n2);
+t_num			*sub(t_calc *calc, t_num *n1, t_num *n2);
 
 /*
 ** util.c
