@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/08 19:28:25 by sgardner          #+#    #+#             */
-/*   Updated: 2018/01/09 22:26:06 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/01/10 22:06:20 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,10 +52,12 @@ void	print_num(t_calc *calc, t_num *num)
 	t_digit	*digit;
 	int		i;
 
-	if (!(out = (char *)ft_memalloc(num->len + 1)))
+	if (!(out = (char *)ft_memalloc(num->len + (num->sign < 0) + 1)))
 		return ;
 	i = 0;
 	digit = skip_zeroes(num->start);
+	if (num->sign < 0 && digit && digit->n != 0)
+		out[i++] = '-';
 	while (digit)
 	{
 		out[i++] = calc->base[digit->n];
