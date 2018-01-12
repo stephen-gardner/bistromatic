@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/08 13:49:48 by sgardner          #+#    #+#             */
-/*   Updated: 2018/01/11 22:31:28 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/01/11 23:45:11 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,12 @@ typedef struct	s_calc
 
 t_num			*add(t_calc *calc, t_num *n1, t_num *n2);
 t_num			*add_digits(t_calc *calc, t_digit *d1, t_digit *d2);
+
+/*
+** arith_div.c
+*/
+
+t_num			*div(t_calc *calc, t_num *n1, t_num *n2);
 
 /*
 ** arith_mul.c
