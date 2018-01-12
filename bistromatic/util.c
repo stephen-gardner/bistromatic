@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/09 21:45:17 by sgardner          #+#    #+#             */
-/*   Updated: 2018/01/11 15:10:26 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/01/11 22:48:31 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ t_num	*strip_zeroes(t_num *num)
 		next = num->start->next;
 		free(num->start);
 		num->start = next;
+		num->start->prev = NULL;
 	}
 	return (num);
 }
