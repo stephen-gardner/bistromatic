@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/08 19:35:32 by sgardner          #+#    #+#             */
-/*   Updated: 2018/01/11 15:35:12 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/01/12 00:22:08 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,9 +70,8 @@ t_num			*sub_digits(t_calc *calc, t_digit *d1, t_digit *d2)
 	if (!(res = (t_num *)ft_memalloc(sizeof(t_num))))
 		return (NULL);
 	carry = 0;
-	while (d1 || d2 || carry)
+	while (d1 || d2 || (n = carry))
 	{
-		n = carry;
 		if (d1)
 		{
 			n += d1->n;
@@ -85,7 +84,8 @@ t_num			*sub_digits(t_calc *calc, t_digit *d1, t_digit *d2)
 		}
 		if ((carry = (n < 0) ? -1 : 0))
 			n += calc->nbase;
-		prepend_digit(res, n);
+		if (!(prepend_digit(res, n)))
+			return (NULL);
 	}
 	return (strip_zeroes(res));
 }
