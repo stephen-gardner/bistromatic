@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/08 19:28:25 by sgardner          #+#    #+#             */
-/*   Updated: 2018/01/11 14:45:14 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/01/11 21:08:35 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,8 @@ t_bool	prepend_digit(t_num *num, int n)
 		return (FALSE);
 	digit->n = n;
 	digit->next = num->start;
+	if (num->start)
+		num->start->prev = digit;
 	num->start = digit;
 	if (!num->end)
 		num->end = digit;
