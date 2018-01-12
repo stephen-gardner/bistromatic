@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/08 19:28:25 by sgardner          #+#    #+#             */
-/*   Updated: 2018/01/11 21:08:35 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/01/11 22:18:28 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,20 +31,19 @@ t_bool	append_digit(t_num *num, int n)
 	return (TRUE);
 }
 
-void	destroy_num(t_num **num)
+void	destroy_num(t_num *num)
 {
 	t_digit	*digit;
 	t_digit	*next;
 
-	digit = (*num)->start;
+	digit = num->start;
 	while (digit)
 	{
 		next = digit->next;
 		free(digit);
 		digit = next;
 	}
-	free(*num);
-	*num = NULL;
+	free(num);
 }
 
 t_bool	prepend_digit(t_num *num, int n)

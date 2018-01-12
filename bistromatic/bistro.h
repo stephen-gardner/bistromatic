@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/08 13:49:48 by sgardner          #+#    #+#             */
-/*   Updated: 2018/01/11 17:38:58 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/01/11 22:31:28 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ t_bool			syntax_error(void);
 */
 
 t_bool			append_digit(t_num *num, int n);
-void			destroy_num(t_num **num);
+void			destroy_num(t_num *num);
 t_bool			prepend_digit(t_num *num, int n);
 void			print_num(t_calc *calc, t_num *num);
 t_num			*read_num(t_calc *calc, char *raw, int len);

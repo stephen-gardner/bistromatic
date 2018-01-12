@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/11 15:53:15 by sgardner          #+#    #+#             */
-/*   Updated: 2018/01/11 21:40:06 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/01/11 22:44:02 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static t_num	*mul_single(t_calc *calc, t_digit *d1, t_digit *d2, int pad)
 	}
 	while (pad--)
 		append_digit(res, 0);
-	return (res);
+	return (strip_zeroes(res));
 }
 
 static t_num	*mul_digits(t_calc *calc, t_digit *d1, t_digit *d2)
@@ -54,8 +54,8 @@ static t_num	*mul_digits(t_calc *calc, t_digit *d1, t_digit *d2)
 		{
 			if (!(res = add(calc, res, single)))
 				return (NULL);
-			destroy_num(&tmp);
-			destroy_num(&single);
+			destroy_num(tmp);
+			destroy_num(single);
 		}
 		else
 			res = single;
@@ -70,7 +70,6 @@ t_num			*mul(t_calc *calc, t_num *n1, t_num *n2)
 	t_num	*res;
 
 	res = mul_digits(calc, n1->end, n2->end);
-	if ((n1->sign < 0 && n2->sign > 0) || (n1->sign > 0 && n2->sign < 0))
-		res->sign = -1;
+	res->sign = n1->sign * n2->sign;
 	return (res);
 }
