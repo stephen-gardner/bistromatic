@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/08 19:35:32 by sgardner          #+#    #+#             */
-/*   Updated: 2018/01/11 15:34:08 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/01/11 23:36:14 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ t_num	*add_digits(t_calc *calc, t_digit *d1, t_digit *d2)
 			n += d2->n;
 			d2 = d2->prev;
 		}
-		carry = (n >= calc->nbase) ? 1 : 0;
+		carry = n / calc->nbase;
 		prepend_digit(res, n % calc->nbase);
 	}
 	return (strip_zeroes(res));
