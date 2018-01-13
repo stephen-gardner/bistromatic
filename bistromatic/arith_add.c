@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/08 19:35:32 by sgardner          #+#    #+#             */
-/*   Updated: 2018/01/12 00:21:47 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/01/12 21:54:30 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ t_num	*add_digits(t_calc *calc, t_digit *d1, t_digit *d2)
 
 	if (!(res = (t_num *)ft_memalloc(sizeof(t_num))))
 		return (NULL);
+	res->sign = 1;
 	carry = 0;
 	while (d1 || d2 || (n = carry))
 	{
