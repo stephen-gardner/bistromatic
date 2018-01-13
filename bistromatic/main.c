@@ -6,11 +6,10 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/08 13:57:20 by sgardner          #+#    #+#             */
-/*   Updated: 2018/01/09 18:44:40 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/01/12 20:59:26 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
 #include <unistd.h>
 #include "bistro.h"
 
@@ -29,7 +28,8 @@ static t_bool	load_base(t_calc *calc, char *base)
 		i++;
 	}
 	calc->base = base;
-	calc->nbase = i;
+	if ((calc->nbase = i) < 2)
+		return (syntax_error());
 	return (i > 0);
 }
 
@@ -76,11 +76,13 @@ int				main(int ac, char **av)
 		return (1);
 printf("raw: %s raw_len: %d base: %s nbase: %d\n", calc.raw, calc.raw_len, calc.base, calc.nbase);
 	t_num *n1 = read_num(&calc, calc.raw, calc.raw_len);
-	t_num *n2 = read_num(&calc, "1004", 4);
-	reverse_num(n1);
-	reverse_num(n2);
-	t_num *res = sub_num(&calc, n1->start, n2->start);
-	reverse_num(res);
+	t_num *n2 = read_num(&calc, "893457489573489574395", 21);
+write(1, "n1: ", 4);
+print_num(&calc, n1);
+write(1, "\nn2: ", 5);
+print_num(&calc, n2);
+printf("\n");
+	t_num *res = divide(&calc, n1, n2);
 	print_num(&calc, res);
 	return (0);
 }

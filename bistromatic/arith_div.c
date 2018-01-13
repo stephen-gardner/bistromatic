@@ -6,11 +6,10 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/11 23:45:17 by sgardner          #+#    #+#             */
-/*   Updated: 2018/01/12 17:45:50 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/01/12 21:03:09 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
 #include "bistro.h"
 
 static int		get_quotient(t_calc *calc, t_num **n1, t_num *n2)
@@ -18,6 +17,8 @@ static int		get_quotient(t_calc *calc, t_num **n1, t_num *n2)
 	int		quo;
 	t_num	*tmp;
 
+	if ((*n1)->len < n2->len)
+		return (0);
 	quo = 0;
 	while (TRUE)
 	{
