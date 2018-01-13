@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/08 13:49:48 by sgardner          #+#    #+#             */
-/*   Updated: 2018/01/12 14:21:00 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/01/12 17:46:33 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ t_num			*add_digits(t_calc *calc, t_digit *d1, t_digit *d2);
 */
 
 t_num			*divide(t_calc *calc, t_num *n1, t_num *n2);
+t_num			*mod(t_calc *calc, t_num *n1, t_num *n2);
 
 /*
 ** arith_mul.c

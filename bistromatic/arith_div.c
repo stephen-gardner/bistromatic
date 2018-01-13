@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/11 23:45:17 by sgardner          #+#    #+#             */
-/*   Updated: 2018/01/12 15:24:34 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/01/12 17:45:50 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static int		get_quotient(t_calc *calc, t_num **n1, t_num *n2)
 	return (quo);
 }
 
-static t_num	*div_digits(t_calc *calc, t_num *n1, t_num *n2)
+static t_num	*div_digits(t_calc *calc, t_num *n1, t_num *n2, t_num **remain)
 {
 	t_num	*res;
 	t_num	*work;
@@ -54,20 +54,42 @@ static t_num	*div_digits(t_calc *calc, t_num *n1, t_num *n2)
 			return (NULL);
 		d1 = d1->next;
 	}
-	destroy_num(work);
+	*remain = work;
 	return (strip_zeroes(res));
 }
 
 t_num			*divide(t_calc *calc, t_num *n1, t_num *n2)
 {
 	t_num	*res;
+	t_num	*remain;
 
 	if (n2->len == 1 && n2->start->n == 0)
 	{
 		syntax_error();
 		return (NULL);
 	}
-	if ((res = div_digits(calc, n1, n2)))
+	if ((res = div_digits(calc, n1, n2, &remain)))
+	{
 		res->sign = n1->sign * n2->sign;
+		destroy_num(remain);
+	}
 	return (res);
+}
+
+t_num			*mod(t_calc *calc, t_num *n1, t_num *n2)
+{
+	t_num	*res;
+	t_num	*remain;
+
+	if (n2->len == 1 && n2->start->n == 0)
+	{
+		syntax_error();
+		return (NULL);
+	}
+	if ((res = div_digits(calc, n1, n2, &remain)))
+	{
+		remain->sign = n1->sign * n2->sign;
+		destroy_num(res);
+	}
+	return (remain);
 }
