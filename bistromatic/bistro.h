@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/08 13:49:48 by sgardner          #+#    #+#             */
-/*   Updated: 2018/01/11 23:45:11 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/01/12 14:21:00 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,14 @@
 # define BISTRO_H
 # include "libft.h"
 #include <stdio.h> // REMOVE BEFORE COMPLETION
+
+typedef struct	s_calc
+{
+	char	*raw;
+	char	*base;
+	int		raw_len;
+	int		nbase;
+}				t_calc;
 
 typedef struct	s_digit
 {
@@ -30,14 +38,6 @@ typedef struct	s_num
 	int		len;
 }				t_num;
 
-typedef struct	s_calc
-{
-	char	*raw;
-	char	*base;
-	int		raw_len;
-	int		nbase;
-}				t_calc;
-
 /*
 ** arith_add.c
 */
@@ -49,7 +49,7 @@ t_num			*add_digits(t_calc *calc, t_digit *d1, t_digit *d2);
 ** arith_div.c
 */
 
-t_num			*div(t_calc *calc, t_num *n1, t_num *n2);
+t_num			*divide(t_calc *calc, t_num *n1, t_num *n2);
 
 /*
 ** arith_mul.c
