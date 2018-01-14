@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/16 01:23:55 by sgardner          #+#    #+#             */
-/*   Updated: 2017/09/24 09:49:14 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/01/13 17:24:24 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,43 @@ typedef struct	s_list
 	size_t			content_size;
 	struct s_list	*next;
 }				t_list;
+
+typedef struct	s_node
+{
+	void			*content;
+	struct s_node	*next;
+}				t_node;
+
+typedef struct	s_stack
+{
+	t_node	*top;
+}				t_stack;
+
+typedef struct	s_queue
+{
+	t_node	*start;
+	t_node	*end;
+}				t_queue;
+
+/*
+** ft_queue.c
+*/
+
+void			*dequeue(t_queue *queue);
+t_bool			enqueue(t_queue *queue, void *content);
+t_queue			*queue_init(void);
+int				queue_isempty(t_queue *queue);
+void			*queue_peek(t_queue *queue);
+
+/*
+** ft_stack.c
+*/
+
+t_stack			*stack_init(void);
+t_bool			stack_isempty(t_stack *stack);
+void			*stack_peek(t_stack *stack);
+void			*stack_pop(t_stack *stack);
+t_bool			stack_push(t_stack *stack, void *content);
 
 /*
 ** Linked lists: libft exclusive

@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/08 13:49:48 by sgardner          #+#    #+#             */
-/*   Updated: 2018/01/13 01:13:51 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/01/13 23:37:27 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,12 @@
 typedef struct	s_calc
 {
 	char	*raw;
+	char	*pos;
 	char	*base;
 	int		raw_len;
 	int		nbase;
+	t_stack	*operators;
+	t_queue	*operands;
 }				t_calc;
 
 typedef struct	s_digit
@@ -37,23 +40,6 @@ typedef struct	s_num
 	int		sign;
 	int		len;
 }				t_num;
-
-typedef struct	s_node
-{
-	void			*content;
-	struct s_node	*next;
-}				t_node;
-
-typedef struct	s_stack
-{
-	t_node	*top;
-}				t_stack;
-
-typedef struct	s_queue
-{
-	t_node	*start;
-	t_node	*end;
-}				t_queue;
 
 /*
 ** arith_add.c
@@ -83,24 +69,10 @@ t_num			*sub(t_calc *calc, t_num *n1, t_num *n2);
 t_num			*sub_digits(t_calc *calc, t_digit *d1, t_digit *d2);
 
 /*
-** ft_queue.c
+** fsm.c
 */
 
-void			*dequeue(t_queue *queue);
-t_bool			enqueue(t_queue *queue, void *content);
-t_queue			*queue_init(void);
-int				queue_isEmpty(t_queue *queue);
-void			*queue_peek(t_queue *queue);
-
-/*
-** ft_stack.c
-*/
-
-t_stack			*stack_init(void);
-t_bool			stack_isEmpty(t_stack *stack);
-void			*stack_peek(t_stack *stack);
-void			*stack_pop(t_stack *stack);
-t_bool			stack_push(t_stack *stack, void *content);
+void			fsm_run(t_calc *calc);
 
 /*
 ** main.c

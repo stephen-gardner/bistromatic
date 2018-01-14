@@ -6,12 +6,12 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/12 23:54:42 by sgardner          #+#    #+#             */
-/*   Updated: 2018/01/13 01:14:56 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/01/13 17:22:36 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
-#include "bistro.h"
+#include "libft.h"
 
 void	*dequeue(t_queue *queue)
 {
@@ -49,7 +49,7 @@ t_queue	*queue_init(void)
 	return ((t_queue *)ft_memalloc(sizeof(t_queue)));
 }
 
-int		queue_isEmpty(t_queue *queue)
+int		queue_isempty(t_queue *queue)
 {
 	return (queue->start == NULL);
 }

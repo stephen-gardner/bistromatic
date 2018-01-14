@@ -6,19 +6,19 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/12 23:06:44 by sgardner          #+#    #+#             */
-/*   Updated: 2018/01/13 01:14:34 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/01/13 17:22:25 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
-#include "bistro.h"
+#include "libft.h"
 
 t_stack	*stack_init(void)
 {
 	return ((t_stack *)ft_memalloc(sizeof(t_stack)));
 }
 
-t_bool	stack_isEmpty(t_stack *stack)
+t_bool	stack_isempty(t_stack *stack)
 {
 	return (stack->top == NULL);
 }

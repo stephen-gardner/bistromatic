@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/08 13:57:20 by sgardner          #+#    #+#             */
-/*   Updated: 2018/01/12 20:59:26 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/01/13 23:13:11 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,9 @@ static t_bool	load_raw(t_calc	*calc)
 {
 	if (!(calc->raw = (char *)ft_memalloc(calc->raw_len + 1)))
 		return (FALSE);
-	if (read(0, calc->raw, calc->raw_len) < calc->raw_len)
-	{
-		syntax_error();
+	if (read(0, calc->raw, calc->raw_len) < 0)
 		return (FALSE);
-	}
+	calc->pos = calc->raw;
 	return (TRUE);
 }
 
@@ -76,13 +74,13 @@ int				main(int ac, char **av)
 		return (1);
 printf("raw: %s raw_len: %d base: %s nbase: %d\n", calc.raw, calc.raw_len, calc.base, calc.nbase);
 	t_num *n1 = read_num(&calc, calc.raw, calc.raw_len);
-	t_num *n2 = read_num(&calc, "893457489573489574395", 21);
+	t_num *n2 = read_num(&calc, "100", 3);
 write(1, "n1: ", 4);
 print_num(&calc, n1);
 write(1, "\nn2: ", 5);
 print_num(&calc, n2);
 printf("\n");
-	t_num *res = divide(&calc, n1, n2);
+	t_num *res = mod(&calc, n1, n2);
 	print_num(&calc, res);
 	return (0);
 }
