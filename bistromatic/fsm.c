@@ -6,52 +6,23 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/13 04:02:45 by sgardner          #+#    #+#             */
-/*   Updated: 2018/01/14 02:15:36 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/01/14 03:33:59 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "bistro.h"
 
-typedef enum
-{
-	DIGIT,
-	NULL_TERM,
-    PAREN_LEFT,
-	PAREN_RIGHT,
-	OP_AS,
-	OP_MDM,
-	SYNTAX_ERROR,
-	NEVENTS
-}	t_event;
-
-typedef enum
-{
-	APPEND_NUM,
-	COLLAPSE,
-	CREATE_NUM,
-	PUSH_TOKEN,
-    START,
-	UNARY,
-	NSTATES
-}	t_state;
-
-
-typedef struct	s_transition
-{
-  t_state (*function)(t_calc *calc, t_event *event);
-}				t_transition;
-
 /*
 ** STATES:
 ** ======
-** { APPEND, COLLAPSE, CREATE_NUM, PUSH_TOKEN, START, UNARY }
+** { APPEND_NUM, COLLAPSE, CREATE_NUM, PUSH_TOKEN, QUIT, START, UNARY }
 **
 ** EVENTS:
 ** ======
 ** { DIGIT, NULL_TERM, PAREN_LEFT, PAREN_RIGHT, OP_AS, OP_MDM, SYNTAX_ERROR }
 */
 
-t_transition	trans[NSTATES][NEVENTS] = {
+t_state	(*trans[NSTATES][NEVENTS])(t_calc *calc, t_event *event) = {
 	{ // APPEND
 		fsm_append,
 		fsm_eval,
@@ -88,6 +59,15 @@ t_transition	trans[NSTATES][NEVENTS] = {
 		fsm_error,
 		fsm_error
 	},
+	{ // QUIT
+		NULL,
+		NULL,
+		NULL,
+		NULL,
+		NULL,
+		NULL,
+		NULL,
+	},
 	{ // START
 		fsm_create,
 		fsm_eval,
@@ -108,6 +88,56 @@ t_transition	trans[NSTATES][NEVENTS] = {
 	}
 };
 
+t_state			fsm_append(t_calc *calc, t_event *event)
+{
+	UNUSED(calc);
+	UNUSED(event);
+	return (APPEND_NUM);
+}
+
+t_state			fsm_collapse(t_calc *calc, t_event *event)
+{
+	UNUSED(calc);
+	UNUSED(event);
+	return (COLLAPSE);
+}
+
+t_state			fsm_create(t_calc *calc, t_event *event)
+{
+	UNUSED(calc);
+	UNUSED(event);
+	return (CREATE_NUM);
+}
+
+t_state			fsm_error(t_calc *calc, t_event *event)
+{
+	UNUSED(calc);
+	UNUSED(event);
+	syntax_error();
+	return (QUIT);
+}
+
+t_state			fsm_eval(t_calc *calc, t_event *event)
+{
+	UNUSED(calc);
+	UNUSED(event);
+	return (QUIT);
+}
+
+t_state			fsm_push(t_calc *calc, t_event *event)
+{
+	UNUSED(calc);
+	UNUSED(event);
+	return (PUSH_TOKEN);
+}
+
+t_state			fsm_unary(t_calc *calc, t_event *event)
+{
+	UNUSED(calc);
+	UNUSED(event);
+	return (UNARY);
+}
+
 static t_event	get_event(char *base, char c)
 {
 	if (ft_strchr(base, c))
@@ -126,11 +156,6 @@ static t_event	get_event(char *base, char c)
 		return (SYNTAX_ERROR);
 }
 
-static t_state	get_next_state(t_calc *calc, t_event *event, t_state *state)
-{
-	return (trans[*event][*state].function(calc, event));
-}
-
 void			fsm_run(t_calc *calc)
 {
 	t_state	state;
@@ -141,6 +166,10 @@ void			fsm_run(t_calc *calc)
 		return ;
 	state = START;
 	event = get_event(calc->base, *calc->pos);
-	while ((state = get_next_state(calc, &event,  &state)))
+	while ((state = trans[state][event](calc, &event)))
+	{
+		if (state == QUIT)
+			break ;
 		event = get_event(calc->base, ++(*calc->pos));
+	}
 }

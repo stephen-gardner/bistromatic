@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/08 13:49:48 by sgardner          #+#    #+#             */
-/*   Updated: 2018/01/13 23:37:27 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/01/14 03:26:03 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,30 @@ typedef struct	s_num
 	int		len;
 }				t_num;
 
+typedef enum	e_event
+{
+	DIGIT,
+	NULL_TERM,
+    PAREN_LEFT,
+	PAREN_RIGHT,
+	OP_AS,
+	OP_MDM,
+	SYNTAX_ERROR,
+	NEVENTS
+}				t_event;
+
+typedef enum	e_state
+{
+	APPEND_NUM,
+	COLLAPSE,
+	CREATE_NUM,
+	PUSH_TOKEN,
+	QUIT,
+    START,
+	UNARY,
+	NSTATES
+}				t_state;
+
 /*
 ** arith_add.c
 */
@@ -73,6 +97,16 @@ t_num			*sub_digits(t_calc *calc, t_digit *d1, t_digit *d2);
 */
 
 void			fsm_run(t_calc *calc);
+
+// FSM functions
+
+t_state			fsm_append(t_calc *calc, t_event *event);
+t_state			fsm_collapse(t_calc *calc, t_event *event);
+t_state			fsm_create(t_calc *calc, t_event *event);
+t_state			fsm_error(t_calc *calc, t_event *event);
+t_state			fsm_eval(t_calc *calc, t_event *event);
+t_state			fsm_push(t_calc *calc, t_event *event);
+t_state			fsm_unary(t_calc *calc, t_event *event);
 
 /*
 ** main.c
