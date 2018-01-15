@@ -6,13 +6,13 @@
 /*   By: sgardner <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/14 16:33:12 by sgardner          #+#    #+#             */
-/*   Updated: 2018/01/14 18:26:38 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/01/14 20:29:36 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "bistro.h"
 
-static t_bool	push_op(t_calc *calc, t_token token, char *lower)
+static t_bool	push_op(t_calc *calc, t_token *token, char *lower)
 {
 	t_token *peek;
 
@@ -44,7 +44,7 @@ t_state			fsm_push(t_calc *calc, t_event *event)
 	}
 	else
 	{
-		if (!push_mdm(calc, token, "(+-"))
+		if (!push_op(calc, token, "(+-"))
 			return (QUIT);
 	}
 	return (PUSH_TOKEN);

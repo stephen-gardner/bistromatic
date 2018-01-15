@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/08 13:49:48 by sgardner          #+#    #+#             */
-/*   Updated: 2018/01/14 17:59:54 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/01/14 22:14:15 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,22 +102,29 @@ t_num			*sub_digits(t_calc *calc, t_digit *d1, t_digit *d2);
 ** fsm.c
 */
 
+t_state			fsm_error(t_calc *calc, t_event *event);
 void			fsm_run(t_calc *calc);
+t_state			fsm_unary(t_calc *calc, t_event *event);
+
+/*
+** fsm_eval.c
+*/
+
+t_state			fsm_collapse(t_calc *calc, t_event *event);
+t_state			fsm_eval(t_calc *calc, t_event *event);
+
+/*
+** fsm_num.c
+*/
+
+t_state			fsm_append(t_calc *calc, t_event *event);
+t_state			fsm_create(t_calc *calc, t_event *event);
 
 /*
 ** fsm_push.c
 */
 
 t_state			fsm_push(t_calc *calc, t_event *event);
-
-// FSM functions
-
-t_state			fsm_append(t_calc *calc, t_event *event);
-t_state			fsm_collapse(t_calc *calc, t_event *event);
-t_state			fsm_create(t_calc *calc, t_event *event);
-t_state			fsm_error(t_calc *calc, t_event *event);
-t_state			fsm_eval(t_calc *calc, t_event *event);
-t_state			fsm_unary(t_calc *calc, t_event *event);
 
 /*
 ** main.c
@@ -139,5 +146,6 @@ t_bool			read_digit(t_calc *calc, t_num *num);
 ** util.c
 */
 
+void			*peek_end(t_queue *queue);
 t_num			*strip_zeroes(t_num *num);
 #endif

@@ -6,10 +6,11 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/13 04:02:45 by sgardner          #+#    #+#             */
-/*   Updated: 2018/01/14 20:21:55 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/01/14 22:16:24 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdlib.h>
 #include "bistro.h"
 
 /*
@@ -22,17 +23,17 @@
 ** { DIGIT, NULL_TERM, PAREN_LEFT, PAREN_RIGHT, OP_AS, OP_MDM, SYNTAX_ERROR }
 */
 
-t_state	(*trans[NSTATES][NEVENTS])(t_calc *calc, t_event *event) = {
-	{ // APPEND
+t_state	(*g_trans[NSTATES][NEVENTS])(t_calc *calc, t_event *event) = {
+	{
 		fsm_append,
 		fsm_eval,
 		fsm_push,
 		fsm_error,
-		fsm_unary,
-		fsm_error,
+		fsm_push,
+		fsm_push,
 		fsm_error
 	},
-	{ // COLLAPSE
+	{
 		fsm_error,
 		fsm_eval,
 		fsm_error,
@@ -41,7 +42,7 @@ t_state	(*trans[NSTATES][NEVENTS])(t_calc *calc, t_event *event) = {
 		fsm_push,
 		fsm_error
 	},
-	{ // CREATE_NUM
+	{
 		fsm_append,
 		fsm_eval,
 		fsm_error,
@@ -50,7 +51,7 @@ t_state	(*trans[NSTATES][NEVENTS])(t_calc *calc, t_event *event) = {
 		fsm_push,
 		fsm_error
 	},
-	{ // PUSH_TOKEN
+	{
 		fsm_create,
 		fsm_error,
 		fsm_push,
@@ -59,7 +60,7 @@ t_state	(*trans[NSTATES][NEVENTS])(t_calc *calc, t_event *event) = {
 		fsm_error,
 		fsm_error
 	},
-	{ // QUIT
+	{
 		NULL,
 		NULL,
 		NULL,
@@ -68,7 +69,7 @@ t_state	(*trans[NSTATES][NEVENTS])(t_calc *calc, t_event *event) = {
 		NULL,
 		NULL,
 	},
-	{ // START
+	{
 		fsm_create,
 		fsm_eval,
 		fsm_push,
@@ -77,7 +78,7 @@ t_state	(*trans[NSTATES][NEVENTS])(t_calc *calc, t_event *event) = {
 		fsm_error,
 		fsm_error
 	},
-	{ // UNARY
+	{
 		fsm_create,
 		fsm_error,
 		fsm_push,
@@ -87,86 +88,6 @@ t_state	(*trans[NSTATES][NEVENTS])(t_calc *calc, t_event *event) = {
 		fsm_error
 	}
 };
-
-t_state			fsm_append(t_calc *calc, t_event *event)
-{
-	t_token	*token;
-
-	if (!(token = queue_peek(calc->queue)))
-		return (fsm_error(calc, event));
-	if (!read_digit(calc, token->content))
-		return (QUIT);
-	return (APPEND_NUM);
-}
-
-t_state			fsm_collapse(t_calc *calc, t_event *event)
-{
-	t_token	*token;
-
-	UNUSED(event);
-	while ((token = stack_pop(calc->stack)) && token->type != '(')
-	{
-		if (!enqueue(calc->queue, token))
-			return (QUIT);
-	}
-	if (!token)
-		return (QUIT);
-	free(token);
-	return (COLLAPSE);
-}
-
-t_state			fsm_create(t_calc *calc, t_event *event)
-{
-	t_token	*token;
-
-	UNUSED(event);
-	if (!(token = (t_token *)ft_memalloc(sizeof(t_token)))
-		|| !(token->content = (t_num *)ft_memalloc(sizeof(t_num)))
-		|| !read_digit(calc, token->content)
-		|| !enqueue(calc->queue, token))
-		return (QUIT);
-	token->type = 'd';
-	return (CREATE_NUM);
-}
-
-t_state			fsm_error(t_calc *calc, t_event *event)
-{
-	UNUSED(calc);
-	UNUSED(event);
-	syntax_error();
-	return (QUIT);
-}
-
-t_state			fsm_eval(t_calc *calc, t_event *event)
-{
-	t_token	*token;
-
-	UNUSED(event);
-	token = queue_peek(calc->queue);
-	print_num(calc, token->content);
-	return (QUIT);
-}
-
-t_state			fsm_unary(t_calc *calc, t_event *event)
-{
-	t_token	*token;
-	int		sign;
-
-	UNUSED(event);
-	token = queue_peek(calc->queue);
-	if (!token
-		|| token->type != 'd'
-		|| (token->type == 'd' && token->content->len > 0))
-	{
-		if (!(token = (t_token *)ft_memalloc(sizeof(t_token)))
-			|| !(token->content = (t_num *)ft_memalloc(sizeof(t_num)))
-			|| !enqueue(calc->queue, token))
-			return (QUIT);
-	}
-	sign = (*calc->pos == '+') ? 1 : -1;
-	token->content->sign *= sign;
-	return (UNARY);
-}
 
 static t_event	get_event(char *base, char c)
 {
@@ -186,6 +107,14 @@ static t_event	get_event(char *base, char c)
 		return (SYNTAX_ERROR);
 }
 
+t_state			fsm_error(t_calc *calc, t_event *event)
+{
+	UNUSED(calc);
+	UNUSED(event);
+	syntax_error();
+	return (QUIT);
+}
+
 void			fsm_run(t_calc *calc)
 {
 	t_state	state;
@@ -198,7 +127,28 @@ void			fsm_run(t_calc *calc)
 	while (state != QUIT)
 	{
 		event = get_event(calc->base, *calc->pos);
-		state = trans[state][event](calc, &event);
+		state = g_trans[state][event](calc, &event);
 		calc->pos++;
 	}
+}
+
+t_state			fsm_unary(t_calc *calc, t_event *event)
+{
+	t_token	*token;
+	int		sign;
+
+	UNUSED(event);
+	token = peek_end(calc->queue);
+	if (!token
+		|| token->type != 'd'
+		|| (token->type == 'd' && ((t_num *)token->content)->len > 0))
+	{
+		if (!(token = (t_token *)ft_memalloc(sizeof(t_token)))
+			|| !(token->content = (t_num *)ft_memalloc(sizeof(t_num)))
+			|| !enqueue(calc->queue, token))
+			return (QUIT);
+	}
+	sign = (*calc->pos == '+') ? 1 : -1;
+	((t_num *)token->content)->sign *= sign;
+	return (UNARY);
 }
