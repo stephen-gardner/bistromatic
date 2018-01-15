@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/11 23:45:17 by sgardner          #+#    #+#             */
-/*   Updated: 2018/01/15 06:51:57 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/01/15 08:52:05 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,23 +63,19 @@ t_num			*divide(t_calc *calc, t_num *n1, t_num *n2)
 {
 	t_num	*res;
 	t_num	*remain;
+	int		sign;
 
+	sign = n1->sign * n2->sign;
+	n1->sign = 1;
+	n2->sign = 1;
 	if (n2->len == 1 && n2->start->n == 0)
 	{
 		syntax_error();
 		return (NULL);
 	}
-	if (n1->len == 1 && n1->start->n == 0)
-	{
-		if (!(res = (t_num *)ft_memalloc(sizeof(t_num)))
-			|| !append_digit(res, 0))
-			return (NULL);
-		res->sign = 1;
-		return (res);
-	}
 	if ((res = div_digits(calc, n1, n2, &remain)))
 	{
-		res->sign = n1->sign * n2->sign;
+		res->sign = sign;
 		destroy_num(remain);
 	}
 	return (res);
