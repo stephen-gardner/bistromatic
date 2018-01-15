@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/08 19:35:32 by sgardner          #+#    #+#             */
-/*   Updated: 2018/01/12 21:51:27 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/01/15 09:32:27 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ t_num			*sub(t_calc *calc, t_num *n1, t_num *n2)
 	t_num	*max;
 	t_num	*res;
 
+	strip_zeroes(n1);
+	strip_zeroes(n2);
 	if (n2->sign < 0)
 	{
 		n2->sign = 1;
