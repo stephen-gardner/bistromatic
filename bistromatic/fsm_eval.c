@@ -6,12 +6,20 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/14 22:05:41 by sgardner          #+#    #+#             */
-/*   Updated: 2018/01/14 23:56:40 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/01/15 04:09:07 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include "bistro.h"
+
+static void		destroy_token(t_token *token)
+{
+	(void)token;
+//	if (token->type == 'd')
+//		destroy_num(token->content);
+//	free(token);
+}
 
 static t_token	*get_result(t_calc *calc, t_token *t1, t_token *t2, char op)
 {
@@ -37,6 +45,8 @@ static t_token	*get_result(t_calc *calc, t_token *t1, t_token *t2, char op)
 		res->content = sub(calc, t1->content, t2->content);
 	else
 		syntax_error();
+	destroy_token(t1);
+	destroy_token(t2);
 	return (res);
 }
 
@@ -44,19 +54,26 @@ static t_num	*solve(t_calc *calc)
 {
 	t_token	*token;
 	t_token	*res;
+	t_num	*num;
 
 	while ((token = dequeue(calc->queue)))
 	{
 		if (token->type == 'd')
-			stack_put(calc->stack, token);
+			stack_push(calc->stack, token);
 		else
 		{
-			res = get_result(stack_pop(calc->stack), stack_pop(calc->stack))
+			res = get_result(calc, stack_pop(calc->stack),
+				stack_pop(calc->stack), token->type);
 			if (!res || !res->content || !stack_push(calc->stack, res))
 				return (NULL);
-			
+			destroy_token(token);
 		}
 	}
+	if (!(token = stack_pop(calc->stack)) || stack_peek(calc->stack))
+		return (NULL);
+	num = token->content;
+	destroy_token(token);
+	return (num);
 }
 
 t_state			fsm_collapse(t_calc *calc, t_event *event)
@@ -78,6 +95,7 @@ t_state			fsm_collapse(t_calc *calc, t_event *event)
 t_state			fsm_eval(t_calc *calc, t_event *event)
 {
 	t_token	*token;
+	t_num	*num;
 
 	UNUSED(event);
 	while ((token = stack_pop(calc->stack)))
@@ -85,5 +103,7 @@ t_state			fsm_eval(t_calc *calc, t_event *event)
 		if (!enqueue(calc->queue, token))
 			return (QUIT);
 	}
+	if ((num = solve(calc)))
+		print_num(calc, num);
 	return (QUIT);
 }
