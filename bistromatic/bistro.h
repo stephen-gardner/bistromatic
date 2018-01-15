@@ -6,14 +6,13 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/08 13:49:48 by sgardner          #+#    #+#             */
-/*   Updated: 2018/01/14 22:14:15 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/01/15 07:00:52 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef BISTRO_H
 # define BISTRO_H
 # include "libft.h"
-#include <stdio.h> // REMOVE BEFORE COMPLETION
 
 typedef struct	s_calc
 {
@@ -102,29 +101,35 @@ t_num			*sub_digits(t_calc *calc, t_digit *d1, t_digit *d2);
 ** fsm.c
 */
 
-t_state			fsm_error(t_calc *calc, t_event *event);
+t_state			fsm_error(t_calc *calc);
 void			fsm_run(t_calc *calc);
-t_state			fsm_unary(t_calc *calc, t_event *event);
 
 /*
 ** fsm_eval.c
 */
 
-t_state			fsm_collapse(t_calc *calc, t_event *event);
-t_state			fsm_eval(t_calc *calc, t_event *event);
+t_state			fsm_collapse(t_calc *calc);
+t_state			fsm_eval(t_calc *calc);
 
 /*
 ** fsm_num.c
 */
 
-t_state			fsm_append(t_calc *calc, t_event *event);
-t_state			fsm_create(t_calc *calc, t_event *event);
+t_state			fsm_append(t_calc *calc);
+t_state			fsm_create(t_calc *calc);
 
 /*
 ** fsm_push.c
 */
 
-t_state			fsm_push(t_calc *calc, t_event *event);
+t_state			fsm_push(t_calc *calc);
+
+/*
+** fsm_unary.c
+*/
+
+t_state			fsm_unary(t_calc *calc);
+t_state			fsm_unary_paren(t_calc *calc);
 
 /*
 ** main.c

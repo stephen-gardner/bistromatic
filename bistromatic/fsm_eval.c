@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/14 22:05:41 by sgardner          #+#    #+#             */
-/*   Updated: 2018/01/15 04:09:07 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/01/15 06:53:15 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,15 +34,15 @@ static t_token	*get_result(t_calc *calc, t_token *t1, t_token *t2, char op)
 		return (NULL);
 	res->type = 'd';
 	if (op == '+')
-		res->content = add(calc, t1->content, t2->content);
+		res->content = add(calc, t2->content, t1->content);
 	else if (op == '/')
-		res->content = divide(calc, t1->content, t2->content);
+		res->content = divide(calc, t2->content, t1->content);
 	else if (op == '%')
-		res->content = mod(calc, t1->content, t2->content);
+		res->content = mod(calc, t2->content, t1->content);
 	else if (op == '*')
-		res->content = mul(calc, t1->content, t2->content);
+		res->content = mul(calc, t2->content, t1->content);
 	else if (op == '-')
-		res->content = sub(calc, t1->content, t2->content);
+		res->content = sub(calc, t2->content, t1->content);
 	else
 		syntax_error();
 	destroy_token(t1);
@@ -59,7 +59,9 @@ static t_num	*solve(t_calc *calc)
 	while ((token = dequeue(calc->queue)))
 	{
 		if (token->type == 'd')
+		{
 			stack_push(calc->stack, token);
+		}
 		else
 		{
 			res = get_result(calc, stack_pop(calc->stack),
@@ -76,11 +78,10 @@ static t_num	*solve(t_calc *calc)
 	return (num);
 }
 
-t_state			fsm_collapse(t_calc *calc, t_event *event)
+t_state			fsm_collapse(t_calc *calc)
 {
 	t_token	*token;
 
-	UNUSED(event);
 	while ((token = stack_pop(calc->stack)) && token->type != '(')
 	{
 		if (!enqueue(calc->queue, token))
@@ -92,12 +93,11 @@ t_state			fsm_collapse(t_calc *calc, t_event *event)
 	return (COLLAPSE);
 }
 
-t_state			fsm_eval(t_calc *calc, t_event *event)
+t_state			fsm_eval(t_calc *calc)
 {
 	t_token	*token;
 	t_num	*num;
 
-	UNUSED(event);
 	while ((token = stack_pop(calc->stack)))
 	{
 		if (!enqueue(calc->queue, token))
