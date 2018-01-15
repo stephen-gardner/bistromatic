@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/12 23:54:42 by sgardner          #+#    #+#             */
-/*   Updated: 2018/01/13 17:22:36 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/01/15 02:36:27 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	*dequeue(t_queue *queue)
 	content = queue->start->content;
 	if (queue->start == queue->end)
 		queue->end = NULL;
-	next = queue->start;
+	next = queue->start->next;
 	free(queue->start);
 	queue->start = next;
 	return (content);
