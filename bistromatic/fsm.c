@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/13 04:02:45 by sgardner          #+#    #+#             */
-/*   Updated: 2018/01/14 18:26:41 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/01/14 19:38:19 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,6 +131,7 @@ t_state			fsm_error(t_calc *calc, t_event *event)
 t_state			fsm_eval(t_calc *calc, t_event *event)
 {
 	t_token	*token;
+
 	UNUSED(calc);
 	UNUSED(event);
 	token = queue_peek(calc->queue);
@@ -140,7 +141,21 @@ t_state			fsm_eval(t_calc *calc, t_event *event)
 
 t_state			fsm_unary(t_calc *calc, t_event *event)
 {
-	UNUSED(calc);
+	t_token	*token;
+	int		sign;
+
+	token = queue_peek(calc->queue);
+	if (!token
+		|| token->type != 'd'
+		|| (token->type == 'd' && token->content->len > 0))
+	{
+		if (!(token = (t_token *)ft_memalloc(sizeof(t_token)))
+			|| !(token->content = (t_num *)ft_memalloc(sizeof(t_num)))
+			|| !enqueue(calc->queue, token))
+			return (QUIT);
+	}
+	sign = (*calc->pos == '+') ? 1 : -1;
+	token->content->sign *= sign;
 	UNUSED(event);
 	return (UNARY);
 }
