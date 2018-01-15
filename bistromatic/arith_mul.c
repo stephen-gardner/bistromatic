@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/11 15:53:15 by sgardner          #+#    #+#             */
-/*   Updated: 2018/01/12 00:22:55 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/01/15 04:05:08 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,9 @@ static t_num	*mul_single(t_calc *calc, t_digit *d1, t_digit *d2, int pad)
 	if (!(res = (t_num *)ft_memalloc(sizeof(t_num))))
 		return (NULL);
 	carry = 0;
-	while (d1 || (n = carry))
+	while (d1 || carry)
 	{
+		n = carry;
 		if (d1)
 		{
 			n += (d1->n * d2->n);
