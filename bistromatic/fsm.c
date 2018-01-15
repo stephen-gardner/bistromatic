@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/13 04:02:45 by sgardner          #+#    #+#             */
-/*   Updated: 2018/01/14 19:38:19 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/01/14 20:21:55 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,8 +101,17 @@ t_state			fsm_append(t_calc *calc, t_event *event)
 
 t_state			fsm_collapse(t_calc *calc, t_event *event)
 {
-	UNUSED(calc);
+	t_token	*token;
+
 	UNUSED(event);
+	while ((token = stack_pop(calc->stack)) && token->type != '(')
+	{
+		if (!enqueue(calc->queue, token))
+			return (QUIT);
+	}
+	if (!token)
+		return (QUIT);
+	free(token);
 	return (COLLAPSE);
 }
 
@@ -132,7 +141,6 @@ t_state			fsm_eval(t_calc *calc, t_event *event)
 {
 	t_token	*token;
 
-	UNUSED(calc);
 	UNUSED(event);
 	token = queue_peek(calc->queue);
 	print_num(calc, token->content);
@@ -144,6 +152,7 @@ t_state			fsm_unary(t_calc *calc, t_event *event)
 	t_token	*token;
 	int		sign;
 
+	UNUSED(event);
 	token = queue_peek(calc->queue);
 	if (!token
 		|| token->type != 'd'
@@ -156,7 +165,6 @@ t_state			fsm_unary(t_calc *calc, t_event *event)
 	}
 	sign = (*calc->pos == '+') ? 1 : -1;
 	token->content->sign *= sign;
-	UNUSED(event);
 	return (UNARY);
 }
 
