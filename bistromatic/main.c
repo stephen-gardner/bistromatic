@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/08 13:57:20 by sgardner          #+#    #+#             */
-/*   Updated: 2018/01/14 01:48:36 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/01/14 18:28:47 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static t_bool	load_base(t_calc *calc, char *base)
 	return (TRUE);
 }
 
-static t_bool	load_raw(t_calc	*calc)
+static t_bool	load_raw(t_calc *calc)
 {
 	if (!(calc->raw = (char *)ft_memalloc(calc->raw_len + 1)))
 		return (FALSE);
