@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/08 19:35:32 by sgardner          #+#    #+#             */
-/*   Updated: 2018/01/15 04:04:31 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/01/15 04:52:27 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ t_num	*add(t_calc *calc, t_num *n1, t_num *n2)
 	}
 	if ((res = add_digits(calc, n1->end, n2->end)))
 		res->sign = 1;
-	return (add_digits(calc, n1->end, n2->end));
+	return (res);
 }
 
 t_num	*add_digits(t_calc *calc, t_digit *d1, t_digit *d2)
