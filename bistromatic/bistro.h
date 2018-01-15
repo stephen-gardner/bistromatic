@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/08 13:49:48 by sgardner          #+#    #+#             */
-/*   Updated: 2018/01/14 03:26:03 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/01/14 17:59:54 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ typedef struct	s_calc
 	char	*base;
 	int		raw_len;
 	int		nbase;
-	t_stack	*operators;
-	t_queue	*operands;
+	t_stack	*stack;
+	t_queue	*queue;
 }				t_calc;
 
 typedef struct	s_digit
@@ -45,7 +45,7 @@ typedef enum	e_event
 {
 	DIGIT,
 	NULL_TERM,
-    PAREN_LEFT,
+	PAREN_LEFT,
 	PAREN_RIGHT,
 	OP_AS,
 	OP_MDM,
@@ -60,10 +60,16 @@ typedef enum	e_state
 	CREATE_NUM,
 	PUSH_TOKEN,
 	QUIT,
-    START,
+	START,
 	UNARY,
 	NSTATES
 }				t_state;
+
+typedef struct	s_token
+{
+	char	type;
+	void	*content;
+}				t_token;
 
 /*
 ** arith_add.c
@@ -98,6 +104,12 @@ t_num			*sub_digits(t_calc *calc, t_digit *d1, t_digit *d2);
 
 void			fsm_run(t_calc *calc);
 
+/*
+** fsm_push.c
+*/
+
+t_state			fsm_push(t_calc *calc, t_event *event);
+
 // FSM functions
 
 t_state			fsm_append(t_calc *calc, t_event *event);
@@ -105,7 +117,6 @@ t_state			fsm_collapse(t_calc *calc, t_event *event);
 t_state			fsm_create(t_calc *calc, t_event *event);
 t_state			fsm_error(t_calc *calc, t_event *event);
 t_state			fsm_eval(t_calc *calc, t_event *event);
-t_state			fsm_push(t_calc *calc, t_event *event);
 t_state			fsm_unary(t_calc *calc, t_event *event);
 
 /*
@@ -122,7 +133,7 @@ t_bool			append_digit(t_num *num, int n);
 void			destroy_num(t_num *num);
 t_bool			prepend_digit(t_num *num, int n);
 void			print_num(t_calc *calc, t_num *num);
-t_num			*read_num(t_calc *calc, char *raw, int len);
+t_bool			read_digit(t_calc *calc, t_num *num);
 
 /*
 ** util.c

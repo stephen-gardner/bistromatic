@@ -6,7 +6,7 @@
 /*   By: sgardner <stephenbgardner@gmail.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/13 04:02:45 by sgardner          #+#    #+#             */
-/*   Updated: 2018/01/14 03:33:59 by sgardner         ###   ########.fr       */
+/*   Updated: 2018/01/14 18:26:41 by sgardner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,8 +90,12 @@ t_state	(*trans[NSTATES][NEVENTS])(t_calc *calc, t_event *event) = {
 
 t_state			fsm_append(t_calc *calc, t_event *event)
 {
-	UNUSED(calc);
-	UNUSED(event);
+	t_token	*token;
+
+	if (!(token = queue_peek(calc->queue)))
+		return (fsm_error(calc, event));
+	if (!read_digit(calc, token->content))
+		return (QUIT);
 	return (APPEND_NUM);
 }
 
@@ -104,8 +108,15 @@ t_state			fsm_collapse(t_calc *calc, t_event *event)
 
 t_state			fsm_create(t_calc *calc, t_event *event)
 {
-	UNUSED(calc);
+	t_token	*token;
+
 	UNUSED(event);
+	if (!(token = (t_token *)ft_memalloc(sizeof(t_token)))
+		|| !(token->content = (t_num *)ft_memalloc(sizeof(t_num)))
+		|| !read_digit(calc, token->content)
+		|| !enqueue(calc->queue, token))
+		return (QUIT);
+	token->type = 'd';
 	return (CREATE_NUM);
 }
 
@@ -119,16 +130,12 @@ t_state			fsm_error(t_calc *calc, t_event *event)
 
 t_state			fsm_eval(t_calc *calc, t_event *event)
 {
+	t_token	*token;
 	UNUSED(calc);
 	UNUSED(event);
+	token = queue_peek(calc->queue);
+	print_num(calc, token->content);
 	return (QUIT);
-}
-
-t_state			fsm_push(t_calc *calc, t_event *event)
-{
-	UNUSED(calc);
-	UNUSED(event);
-	return (PUSH_TOKEN);
 }
 
 t_state			fsm_unary(t_calc *calc, t_event *event)
@@ -140,10 +147,10 @@ t_state			fsm_unary(t_calc *calc, t_event *event)
 
 static t_event	get_event(char *base, char c)
 {
-	if (ft_strchr(base, c))
-		return (DIGIT);
-	else if (c == '\0')
+	if (!c)
 		return (NULL_TERM);
+	else if (ft_strchr(base, c))
+		return (DIGIT);
 	else if (c == '(')
 		return (PAREN_LEFT);
 	else if (c == ')')
@@ -161,15 +168,14 @@ void			fsm_run(t_calc *calc)
 	t_state	state;
 	t_event	event;
 
-	if (!(calc->operators = stack_init())
-		|| !(calc->operands = queue_init()))
+	if (!(calc->stack = stack_init())
+		|| !(calc->queue = queue_init()))
 		return ;
 	state = START;
-	event = get_event(calc->base, *calc->pos);
-	while ((state = trans[state][event](calc, &event)))
+	while (state != QUIT)
 	{
-		if (state == QUIT)
-			break ;
-		event = get_event(calc->base, ++(*calc->pos));
+		event = get_event(calc->base, *calc->pos);
+		state = trans[state][event](calc, &event);
+		calc->pos++;
 	}
 }
